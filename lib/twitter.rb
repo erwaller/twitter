@@ -4,8 +4,8 @@ require 'rubygems'
 gem 'oauth', '>= 0.3.5'
 require 'oauth'
 
-gem 'mash', '0.0.3'
-require 'mash'
+gem 'peterpunk-mhash', '0.0.8'
+require 'mhash'
 
 gem 'httparty', '0.4.3'
 require 'httparty'
@@ -31,17 +31,17 @@ module Twitter
   
   def self.firehose
     response = HTTParty.get('http://twitter.com/statuses/public_timeline.json', :format => :json)
-    response.map { |tweet| Mash.new(tweet) }
+    response.map { |tweet| Mhash.new(tweet) }
   end
   
   def self.user(id)
     response = HTTParty.get("http://twitter.com/users/show/#{id}.json", :format => :json)
-    Mash.new(response)
+    Mhash.new(response)
   end
   
   def self.status(id)
     response = HTTParty.get("http://twitter.com/statuses/show/#{id}.json", :format => :json)
-    Mash.new(response)
+    Mhash.new(response)
   end
   
   def self.friend_ids(id)

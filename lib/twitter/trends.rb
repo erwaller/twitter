@@ -23,7 +23,7 @@ module Twitter
     
     private
       def self.mashup(response)
-        response['trends'].values.flatten.map { |t| Mash.new(t) }
+        response['trends'].values.flatten.map { |t| Mhash.new(t) }
       end
   end
 end

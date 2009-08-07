@@ -15,7 +15,7 @@ module Twitter
     def_delegators :client, :get, :post
     
     def initialize(client, method, path, options={})
-      @client, @method, @path, @options = client, method, path, {:mash => true}.merge(options)
+      @client, @method, @path, @options = client, method, path, {:mhash => true}.merge(options)
     end
     
     def uri
@@ -46,7 +46,7 @@ module Twitter
       def make_friendly(response)
         raise_errors(response)
         data = parse(response)
-        options[:mash] ? mash(data) : data
+        options[:mhash] ? mhash(data) : data
       end
       
       def raise_errors(response)
@@ -73,19 +73,19 @@ module Twitter
         Crack::JSON.parse(response.body)
       end
       
-      def mash(obj)
+      def mhash(obj)
         if obj.is_a?(Array)
-          obj.map { |item| make_mash_with_consistent_hash(item) }
+          obj.map { |item| make_mhash_with_consistent_hash(item) }
         elsif obj.is_a?(Hash)
-          make_mash_with_consistent_hash(obj)
+          make_mhash_with_consistent_hash(obj)
         else
           obj
         end
       end
 
-      # Lame workaround for the fact that mash doesn't hash correctly
-      def make_mash_with_consistent_hash(obj)
-        m = Mash.new(obj)
+      # Lame workaround for the fact that mhash doesn't hash correctly
+      def make_mhash_with_consistent_hash(obj)
+        m = Mhash.new(obj)
         def m.hash
           inspect.hash
         end

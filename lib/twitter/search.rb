@@ -98,7 +98,7 @@ module Twitter
         query = @query.dup
         query[:q] = query[:q].join(' ')
         response = self.class.get('http://search.twitter.com/search.json', :query => query, :format => :json, :headers => {'User-Agent' => user_agent})
-        @fetch = Mash.new(response)
+        @fetch = Mhash.new(response)
       end
       
       @fetch

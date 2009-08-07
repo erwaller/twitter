@@ -38,9 +38,9 @@ class RequestTest < Test::Unit::TestCase
         @object = @request.perform
       end
 
-      should "return array of mashes" do
+      should "return array of mhashes" do
         @object.size.should == 20
-        @object.each { |obj| obj.class.should be(Mash) }
+        @object.each { |obj| obj.class.should be(Mhash) }
         @object.first.text.should == 'Colder out today than expected. Headed to the Beanery for some morning wakeup drink. Latte or coffee...hmmm...'
       end
     end
@@ -56,8 +56,8 @@ class RequestTest < Test::Unit::TestCase
         @object = @request.perform
       end
 
-      should "return a single mash" do
-        @object.class.should be(Mash)
+      should "return a single mhash" do
+        @object.class.should be(Mhash)
         @object.text.should == 'Rob Dyrdek is the funniest man alive. That is all.'
       end
     end
@@ -119,7 +119,7 @@ class RequestTest < Test::Unit::TestCase
         @object = @request.perform
       end
 
-      should "return a mash of the object" do
+      should "return a mhash of the object" do
         @object.text.should == 'Rob Dyrdek is the funniest man alive. That is all.'
       end
     end
@@ -201,17 +201,17 @@ class RequestTest < Test::Unit::TestCase
     end
   end
   
-  context "Making request with mash option set to false" do
+  context "Making request with mhash option set to false" do
     setup do
       oauth = Twitter::OAuth.new('token', 'secret')
       oauth.authorize_from_access('atoken', 'asecret')
       @client = Twitter::Base.new(oauth)
     end
     
-    should "not attempt to create mash of return object" do
+    should "not attempt to create mhash of return object" do
       stub_get('http://twitter.com:80/foo', 'friend_ids.json')
-      object = Twitter::Request.get(@client, '/foo', :mash => false)
-      object.class.should_not be(Mash)
+      object = Twitter::Request.get(@client, '/foo', :mhash => false)
+      object.class.should_not be(Mhash)
     end
   end
 end
