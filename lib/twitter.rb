@@ -1,7 +1,7 @@
 require 'forwardable'
 require 'rubygems'
 
-gem 'oauth', '0.3.4'
+gem 'oauth', '0.3.5'
 require 'oauth'
 
 gem 'peterpunk-mhash', '0.0.8'
