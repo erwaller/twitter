@@ -5,7 +5,7 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name              = "twitter"
-    gem.summary           = %Q{wrapper for the twitter api (oauth only)}
+    gem.summary           = %Q{wrapper for the twitter api}
     gem.email             = "nunemaker@gmail.com"
     gem.homepage          = "http://github.com/jnunemaker/twitter"
     gem.authors           = ["John Nunemaker"]
@@ -16,11 +16,14 @@ begin
     gem.add_dependency('mash', '0.0.3')
     gem.add_dependency('httparty', '0.4.3')
     
-    gem.add_development_dependency('thoughtbot-shoulda')
-    gem.add_development_dependency('jeremymcanally-matchy')
-    gem.add_development_dependency('mocha')
-    gem.add_development_dependency('fakeweb')
-    gem.add_development_dependency('mash')
+    gem.add_development_dependency('thoughtbot-shoulda', '>= 2.10.1')
+    gem.add_development_dependency('jeremymcanally-matchy', '0.4.0')
+    gem.add_development_dependency('mocha', '0.9.4')
+    gem.add_development_dependency('fakeweb', '>= 1.2.5')
+  end
+  
+  Jeweler::RubyforgeTasks.new do |rubyforge|
+    # rubyforge.doc_task = "rdoc"
   end
 rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
@@ -64,40 +67,7 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
 
-begin
-  require 'rake/contrib/sshpublisher'
-  namespace :rubyforge do
-    
-    desc "Release gem and RDoc documentation to RubyForge"
-    task :release => ["rubyforge:release:gem", "rubyforge:release:website", "rubyforge:release:docs"]
-    
-    namespace :release do
-      desc "Publish RDoc to RubyForge."
-      task :docs => [:rdoc] do
-        config = YAML.load(
-            File.read(File.expand_path('~/.rubyforge/user-config.yml'))
-        )
-
-        host = "#{config['username']}@rubyforge.org"
-        remote_dir = "/var/www/gforge-projects/twitter/rdoc"
-        local_dir = 'rdoc'
-
-        Rake::SshDirPublisher.new(host, remote_dir, local_dir).upload
-      end
-      
-      task :website do
-        config = YAML.load(
-            File.read(File.expand_path('~/.rubyforge/user-config.yml'))
-        )
-
-        host = "#{config['username']}@rubyforge.org"
-        remote_dir = "/var/www/gforge-projects/twitter/"
-        local_dir = 'website'
-        
-        Rake::SshDirPublisher.new(host, remote_dir, local_dir).upload
-      end
-    end
-  end
-rescue LoadError
-  puts "Rake SshDirPublisher is unavailable or your rubyforge environment is not configured."
+desc 'Upload website files to rubyforge'
+task :website do
+  sh %{rsync -av website/ jnunemaker@rubyforge.org:/var/www/gforge-projects/twitter}
 end
